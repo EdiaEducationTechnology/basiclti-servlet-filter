@@ -23,3 +23,11 @@ Installing
 To install this project, run
 
 mvn install
+
+Usage Guide
+=======================
+
+The usage guide can be found at:
+
+https://confluence.edia.nl/confluence/display/EKB/Using+the+Basic+LTI+Servlet+Filter
+
