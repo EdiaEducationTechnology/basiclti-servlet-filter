@@ -4,10 +4,10 @@
   <groupId>org.imsglobal.basiclti-filter</groupId>
   <artifactId>basiclti-filter-base</artifactId>
   <packaging>pom</packaging>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
   <name>IMS Global Basic LTI Servlet Filter BASE</name>
   <properties>
-  	<spring.version>[2.5.6,3.1.4.RELEASE]</spring.version>
+    <spring.version>[2.5.6,3.1.4.RELEASE]</spring.version>
   </properties>
   <profiles>
     <profile>
@@ -190,6 +190,14 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
+      </plugin>
     </plugins>
     <resources>
       <resource>
@@ -202,4 +210,43 @@
       </resource>
     </resources>
   </build>
+  <scm>
+    <url>scm:git:git@github.com:EdiaEducationTechnology/basiclti-servlet-filter.git</url>
+    <connection>scm:git:git@github.com:EdiaEducationTechnology/basiclti-servlet-filter.git</connection>
+    <tag>master</tag>
+  </scm>
+  <distributionManagement>
+    <repository>
+      <id>public</id>
+      <url>http://archiva.edia.nl/archiva/repository/public/</url>
+    </repository>
+    <snapshotRepository>
+      <id>public-snapshots</id>
+      <url>http://archiva.edia.nl/archiva/repository/public-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <repositories>
+    <repository>
+      <id>public</id>
+      <name>Edia Public Archiva Repository</name>
+      <url>http://archiva.edia.nl/archiva/repository/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>public-snapshots</id>
+      <name>Edia Public Archiva Snapshot Repository</name>
+      <url>http://archiva.edia.nl/archiva/repository/public-snapshots/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
