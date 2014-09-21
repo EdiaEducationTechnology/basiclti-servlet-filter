@@ -56,6 +56,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.meterware.pseudoserver.HttpRequest;
+
 /**
  * <p>The Basic LTI Security filter class enforces either a valid Basic LTI request to be present or a BasicLTI object to be present in the session.</p>
  * <p>The class {@link BasicLTIContextWebUtil} is responsible for storing and retrieving the ${@link BasicLtiContext} object in the session.</p>
@@ -64,7 +66,9 @@ import org.springframework.web.filter.GenericFilterBean;
  *
  */
 public class BasicLTISecurityFilter extends GenericFilterBean {
-	protected FilterConfig filterConfig;
+	public static final String CONTEXT_PARAM_SESSION = "session";
+	public static final String CONTEXT_PARAM_REQUEST = "request";
+	public static final String INIT_PARAM_CONTEXT = "context";
 
 	private static final Log LOG = LogFactory.getLog(BasicLTISecurityFilter.class);
 
@@ -118,11 +122,19 @@ public class BasicLTISecurityFilter extends GenericFilterBean {
 		return context;
 	}
 
-	private void copyBasicLtiIntoSession(HttpServletRequest request, OAuthMessage requestMessage) throws OAuthProblemException, IOException {
-		requestMessage.requireParameters("roles", "resource_link_id", "user_id", "context_id");
-		HttpSession session = request.getSession(true);
+	private void copyBasicLtiIntoContext(HttpServletRequest request, OAuthMessage requestMessage) throws OAuthProblemException, IOException {
+		
 		BasicLtiContext basicLtiContext = buildBasicLtiContext(requestMessage);
-		BasicLTIContextWebUtil.setBasicLtiContext(session, basicLtiContext);
+		// Get the param
+		String contextInitParam = getFilterConfig().getInitParameter(INIT_PARAM_CONTEXT);
+		// Default to session
+		contextInitParam = (contextInitParam != null ? contextInitParam : CONTEXT_PARAM_SESSION);
+		requestMessage.requireParameters("lti_message_type", "resource_link_id", "lti_version");
+		if (CONTEXT_PARAM_SESSION.equalsIgnoreCase(contextInitParam)) {
+			BasicLTIContextWebUtil.setBasicLtiContext(request.getSession(true), basicLtiContext);
+		} else {
+			BasicLTIContextWebUtil.setBasicLtiContext(request, basicLtiContext);
+		}
 	}
 
 	@Override
@@ -133,9 +145,8 @@ public class BasicLTISecurityFilter extends GenericFilterBean {
 
 	private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-		HttpSession session = request.getSession(true);
 		boolean isBasicLtiRequest = isBasicLtiRequest(request);
-		if (!isBasicLtiRequest && isBasicLtiSet(session)) {
+		if (!isBasicLtiRequest && isBasicLtiSet(request)) {
 			chain.doFilter(request, response);
 		} else {
 			if (isBasicLtiRequest) {
@@ -193,7 +204,7 @@ public class BasicLTISecurityFilter extends GenericFilterBean {
             OAuthAccessor accessor = new OAuthAccessor(consumer);
             accessor.tokenSecret = "";
             oAuthValidator.validateMessage(message, accessor);
-            copyBasicLtiIntoSession(request, message);
+            copyBasicLtiIntoContext(request, message);
 			chain.doFilter(request, response);
 		} catch (OAuthProblemException e) {
 			LOG.warn("OAuthProblemException", e);
@@ -211,8 +222,8 @@ public class BasicLTISecurityFilter extends GenericFilterBean {
 		return "basic-lti-launch-request".equals(request.getParameter("lti_message_type"));
 	}
 
-	public boolean isBasicLtiSet(HttpSession session) {
-		return BasicLTIContextWebUtil.getBasicLtiContext(session) != null;
+	public boolean isBasicLtiSet(HttpServletRequest request) {
+		return BasicLTIContextWebUtil.getBasicLtiContext(request) != null;
 	}
 
 }

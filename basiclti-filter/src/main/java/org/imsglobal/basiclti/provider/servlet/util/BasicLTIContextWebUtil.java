@@ -20,6 +20,7 @@ package org.imsglobal.basiclti.provider.servlet.util;
  * permissions and limitations under the License. 
  *
  **********************************************************************************/
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.imsglobal.basiclti.provider.api.BasicLtiContext;
@@ -34,11 +35,30 @@ public class BasicLTIContextWebUtil {
 	 * Gets the {@link BasicLtiContext}, if set.
 	 * @param session
 	 * @return the {@link BasicLtiContext} available in the sessio, null if not set.
+	 * @see {@link #getBasicLtiContext(HttpServletRequest)}
 	 */
+	@Deprecated
 	public static BasicLtiContext getBasicLtiContext(HttpSession session) {
 		return (BasicLtiContext) session.getAttribute(getSessionAttributeName());
 	}
 
+	/**
+	 * Gets the {@link BasicLtiContext}, if set.
+	 * @param session
+	 * @return the {@link BasicLtiContext} available in the sessio, null if not set.
+	 */
+	public static BasicLtiContext getBasicLtiContext(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		BasicLtiContext context = null;
+		if (session != null) {
+			context = (BasicLtiContext) session.getAttribute(getSessionAttributeName());
+		}
+		if (context == null) {
+			context = (BasicLtiContext) request.getAttribute(getSessionAttributeName());
+		}
+		return context;
+	}
+	
 	protected static String getSessionAttributeName() {
 	    return "session-" + BasicLtiContext.class.getName();
     }
@@ -53,6 +73,18 @@ public class BasicLTIContextWebUtil {
 			session.setAttribute(getSessionAttributeName(), basicLtiContext);
 		} else {
 			session.removeAttribute(getSessionAttributeName());
+		}
+	}
+	/**
+	 * Sets the {@link BasicLtiContext} in the http request, set to null to delete
+	 * @param request
+	 * @param basicLtiContext
+	 */
+	public static void setBasicLtiContext(HttpServletRequest request, BasicLtiContext basicLtiContext) {
+		if (basicLtiContext != null) {
+			request.setAttribute(getSessionAttributeName(), basicLtiContext);
+		} else {
+			request.removeAttribute(getSessionAttributeName());
 		}
 	}
 }
