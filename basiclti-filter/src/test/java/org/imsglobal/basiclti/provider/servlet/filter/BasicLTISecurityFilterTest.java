@@ -75,6 +75,7 @@ public class BasicLTISecurityFilterTest extends AbstractJUnit38SpringContextTest
 		OAuthAccessor accessor = new OAuthAccessor(consumer);
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("lti_message_type", "basic-lti-launch-request");
+		map.put("lti_version", "LTI-1p0");
 		map.put("roles", "Teacher");
 		map.put("resource_link_id", "LINK_ID");
 		map.put("user_id", "USER_ID");
@@ -106,6 +107,7 @@ public class BasicLTISecurityFilterTest extends AbstractJUnit38SpringContextTest
 		OAuthAccessor accessor = new OAuthAccessor(consumer);
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("lti_message_type", "basic-lti-launch-request");
+		map.put("lti_version", "LTI-1p0");
 		map.put("roles", "Teacher");
 		map.put("resource_link_id", "LINK_ID");
 		map.put("user_id", "USER_ID");
