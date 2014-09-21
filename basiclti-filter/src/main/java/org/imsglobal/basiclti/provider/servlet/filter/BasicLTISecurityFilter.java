@@ -27,13 +27,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
@@ -55,8 +53,6 @@ import org.imsglobal.basiclti.provider.servlet.util.BasicLTIContextWebUtil;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.GenericFilterBean;
-
-import com.meterware.pseudoserver.HttpRequest;
 
 /**
  * <p>The Basic LTI Security filter class enforces either a valid Basic LTI request to be present or a BasicLTI object to be present in the session.</p>
