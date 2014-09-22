@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.imsglobal.basiclti-filter</groupId>
     <artifactId>basiclti-filter-base</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.1</version>
   </parent>
   <dependencies>
     <dependency>
