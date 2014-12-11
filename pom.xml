@@ -7,7 +7,7 @@
   <version>0.2.2-SNAPSHOT</version>
   <name>IMS Global Basic LTI Servlet Filter BASE</name>
   <properties>
-    <spring.version>[2.5.6,3.1.4.RELEASE]</spring.version>
+    <spring.version>2.5.6.SEC03</spring.version>
   </properties>
   <profiles>
     <profile>
