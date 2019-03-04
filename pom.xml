@@ -4,7 +4,7 @@
   <groupId>org.imsglobal.basiclti-filter</groupId>
   <artifactId>basiclti-filter</artifactId>
   <packaging>jar</packaging>
-  <version>0.2.4-SNAPSHOT</version>
+  <version>0.2.4</version>
   <name>IMS Global Basic LTI Servlet Filter</name>
   <properties>
     <spring.version>2.5</spring.version>
